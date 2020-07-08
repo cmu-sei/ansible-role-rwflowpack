@@ -1,0 +1,111 @@
+---
+# defaults file for rwflowpack
+#Copyright 2020 Carnegie Mellon University.
+#NO WARRANTY. THIS CARNEGIE MELLON UNIVERSITY AND SOFTWARE ENGINEERING INSTITUTE MATERIAL IS FURNISHED ON AN "AS-IS" BASIS. CARNEGIE MELLON UNIVERSITY MAKES NO WARRANTIES OF ANY KIND, EITHER EXPRESSED OR IMPLIED, AS TO ANY MATTER INCLUDING, BUT NOT LIMITED TO, WARRANTY OF FITNESS FOR PURPOSE OR MERCHANTABILITY, EXCLUSIVITY, OR RESULTS OBTAINED FROM USE OF THE MATERIAL. CARNEGIE MELLON UNIVERSITY DOES NOT MAKE ANY WARRANTY OF ANY KIND WITH RESPECT TO FREEDOM FROM PATENT, TRADEMARK, OR COPYRIGHT INFRINGEMENT.
+#Released under a MIT (SEI)-style license, please see license.txt or contact permission@sei.cmu.edu for full terms.
+#[DISTRIBUTION STATEMENT A] This material has been approved for public release and unlimited distribution.  Please see Copyright notice for non-US Government use and distribution.
+#CERT® is registered in the U.S. Patent and Trademark Office by Carnegie Mellon University.
+#This Software includes and/or makes use of the following Third-Party Software subject to its own license:
+#1. ansible (https://github.com/ansible/ansible/tree/devel/licenses) Copyright 2019 Red Hat, Inc.
+#2. molecule (https://github.com/ansible-community/molecule/blob/master/LICENSE) Copyright 2018 Red Hat, Inc.
+#3. testinfra (https://github.com/philpep/testinfra/blob/master/LICENSE) Copyright 2020 Philippe Pepiot.
+#DM20-0532
+silk_packing_tools_loc: "/usr/local/sbin"
+
+rwflowpack_myname: "rwflowpack"
+rwflowpack_conf_template: "rwflowpack.conf.j2"
+rwflowpack_conf_file_loc: "/usr/local/etc"
+rwflowpack_conf_file_path: "{{ rwflowpack_conf_file_loc }}/{{ rwflowpack_myname }}.conf"
+rwflowpack_init_template: "rwflowpack.j2"
+rwflowpack_init_file_path: "/etc/init.d/{{ rwflowpack_myname }}"
+
+rwflowpack_service: True
+rwflowpack_statedirectory: "/usr/local/var/lib/rwflowpack"
+rwflowpack_create_directories: "no"
+rwflowpack_bin_dir: "{{ silk_packing_tools_loc }}"
+data_rootdir: "/data/"
+rwflowpack_packing_logic: ""
+rwflowpack_input_mode: "stream"
+rwflowpack_incoming_dir: ""
+rwflowpack_archive_dir: ""
+flat_archive: "0"
+rwflowpack_error_dir: ""
+rwflowpack_output_mode: "local-storage"
+rwflowpack_sender_dir: "{{ rwflowpack_statedirectory }}/sender-incoming"
+rwflowpack_incremental_dir: "{{ rwflowpack_statedirectory }}/sender-incoming"
+rwflowpack_compression_type: ""
+rwflowpack_polling_interval: "15"
+rwflowpack_flush_timeout: "120"
+rwflowpack_cache_size: "64"
+rwflowpack_file_locking: "1"
+rwflowpack_pack_interfaces: "0"
+rwflowpack_silk_ipfix_print_templates: ""
+
+rwflowpack_log_type: "syslog"
+rwflowpack_log_level: "info"
+rwflowpack_log_dir: "{{ rwflowpack_statedirectory }}/log"
+rwflowpack_pid_dir: "{{ rwflowpack_log_dir }}"
+rwflowpack_user: "root"
+rwflowpack_extra_options: ""
+rwflowpack_extra_envvar: ""
+
+sensor_conf_template: "sensor.conf.j2"
+sensor_conf_file_loc: "{{ data_rootdir }}"
+sensor_conf_file_path: "{{ sensor_conf_file_loc }}sensor.conf"
+sensor_conf_file_contents: ""
+# Example sensor.conf contents:
+#     sensor_conf_file_contents: |
+#         probe S0 ipfix
+#             poll-directory /tmp/var/yaf
+#         end probe
+#         
+#         sensor S0
+#             ipfix-probes S0
+#             internal-ipblock 128.2.0.0/16
+#             external-ipblock remainder
+#         end sensor
+
+silk_conf_template: "silk.conf.j2"
+silk_conf_file_loc: "{{ data_rootdir }}"
+silk_conf_file_path: "{{ silk_conf_file_loc }}silk.conf"
+sensor_definitions: ""
+# Example sensor_definitions:
+#     sensor_definitions: |
+#         sensor 0 S0    "Description for sensor S0"
+#         sensor 1 S1
+#         sensor 2 S2    "Optional description for sensor S2"
+#         sensor 3 S3
+#         sensor 4 S4
+#         sensor 5 S5
+#         sensor 6 S6
+#         sensor 7 S7
+#         sensor 8 S8
+#         sensor 9 S9
+#         sensor 10 S10
+#         sensor 11 S11
+#         sensor 12 S12
+#         sensor 13 S13
+#         sensor 14 S14
+class_block_definitions: ""
+# Example class_block_definitions:
+#    class_block_definitions: |
+#        class all
+#            sensors S0 S1 S2 S3 S4 S5 S6 S7 S8 S9 S10 S11 S12 S13 S14
+#        end class
+class_type_definitions: |
+    class all
+        type  0 in      in
+        type  1 out     out
+        type  2 inweb   iw
+        type  3 outweb  ow
+        type  4 innull  innull
+        type  5 outnull outnull
+        type  6 int2int int2int
+        type  7 ext2ext ext2ext
+        type  8 inicmp  inicmp
+        type  9 outicmp outicmp
+        type 10 other   other
+        default-types in inweb inicmp
+    end class
+default_class: "all"
+packing_logic_plugin: "packlogic-twoway.so"

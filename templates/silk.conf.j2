@@ -1,0 +1,39 @@
+# {{ ansible_managed }}
+# silk.conf
+# RCSIDENT("$SiLK: silk.conf 52d8f4f62ffd 2012-05-25 21:16:30Z mthomas $")
+
+# For a description of the syntax of this file, see silk.conf(5).
+
+# The syntactic format of this file
+#    version 2 supports sensor descriptions, but otherwise identical to 1
+version 2
+
+# NOTE: Once data has been collected for a sensor or a flowtype, the
+# sensor or flowtype should never be removed or renumbered.  SiLK Flow
+# files store the sensor ID and flowtype ID as integers; removing or
+# renumbering a sensor or flowtype breaks this mapping.
+
+{{ sensor_definitions }}
+
+{{ class_block_definitions }}
+
+# Editing above this line is sufficient for sensor definition.
+
+# Be sure you understand the workings of the packing system before
+# editing the class and type definitions below.  In particular, if you
+# change or add-to the following, the C code in packlogic-twoway.c
+# will need to change as well.
+
+{{ class_type_definitions }}
+
+default-class {{ default_class }}
+
+# The layout of the tree below SILK_DATA_ROOTDIR.
+# Use the default, which assumes a single class.
+# path-format "%T/%Y/%m/%d/%x"
+
+# The plug-in to load to get the packing logic to use in rwflowpack.
+# The --packing-logic switch to rwflowpack will override this value.
+# If SiLK was configured with hard-coded packing logic, this value is
+# ignored. 
+packing-logic "{{ packing_logic_plugin }}"
